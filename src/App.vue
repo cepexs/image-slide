@@ -23,11 +23,14 @@ const footerImage = ref([
   },
 ]);
 
+const slideClass = ref("slide-fade");
+
 previewImage.value = [];
 
 previewImage.value.push(footerImage.value[step.value]);
 
 const next = () => {
+  slideClass.value = "slide-next";
   if (step.value <= footerImage.value.length - 2) {
     step.value++;
     previewImage.value.push(footerImage.value[step.value]);
@@ -40,6 +43,7 @@ const next = () => {
 };
 
 const prev = () => {
+  slideClass.value = "slide-back";
   if (step.value >= 1) {
     step.value--;
     previewImage.value.push(footerImage.value[step.value]);
@@ -52,6 +56,7 @@ const prev = () => {
 };
 
 const changePreview = (i) => {
+  slideClass.value = "slide-fade";
   step.value = i;
   previewImage.value.push(footerImage.value[step.value]);
   previewImage.value.shift();
@@ -63,12 +68,12 @@ const changePreview = (i) => {
     <div
       class="absolute h-2/3 w-full flex flex-col justify-center items-center"
     >
-      <transition-group name="slide-next relative" mode="out-in">
+      <transition-group taga="div" :name="slideClass" mode="out-in">
         <div
-          :id="`${x}`"
+          :id="`${item.caption}}`"
           class="absolute"
           v-for="(item, x) in previewImage"
-          :key="x"
+          :key="`${item.caption}`"
         >
           <h1 class="text-center p-4">{{ item.caption }}</h1>
           <img class="border rounded-lg shadow-lg" :src="`${item.href}`" />
@@ -123,8 +128,10 @@ const changePreview = (i) => {
       <img
         v-for="(item, i) in footerImage"
         :key="i"
-        class="w-24 rounded-lg cursor-pointer border-2 border-opacity-0 active:border selection:border-4"
-        :class="[i === step ? 'border-purple-800 border-opacity-100' : '']"
+        class="w-24 rounded-lg cursor-pointer border-2 border-opacity-0 transition duration-500 ease-in-out"
+        :class="[
+          i === step ? 'border-purple-800 border-opacity-100 scale-105' : '',
+        ]"
         @click="changePreview(i)"
         :src="item.href"
       />
@@ -137,41 +144,50 @@ const changePreview = (i) => {
 .slide-fade-enter-active {
   transition: all 0.8s ease;
 }
-.slide-fade-leave-active {
-  transition: all 0.3s cubic-bezier(1, 0.5, 0.3, 1);
-}
-.slide-fade-enter,
-.slide-fade-leave-to {
-  transform: translateX(30px);
+.slide-fade-enter-from {
+  transform: scale(0.5);
   opacity: 0;
 }
 
+.slide-fade-leave-active {
+  transition: all 0.7s cubic-bezier(1, 0.5, 0.3, 1);
+}
+
+.slide-fade-leave-to {
+  transform: scale(0.5);
+  opacity: 0;
+}
+
+/* next */
 .slide-next-enter-active {
   transition: all 1s ease;
 }
 .slide-next-leave-active {
   transition: all 0.3s cubic-bezier(1, 0.5, 0.3, 1);
 }
-.slide-next-enter {
-  transform: translateX(100px);
+.slide-next-enter-from {
+  transform: translateX(-200px);
   opacity: 0;
 }
+
 .slide-next-leave-to {
-  transform: translateX(-100px);
+  transform: translateX(200px);
   opacity: 0;
 }
+
+/* back/prev */
 .slide-back-enter-active {
   transition: all 1s ease;
 }
 .slide-back-leave-active {
   transition: all 0.3s cubic-bezier(1, 0.5, 0.3, 1);
 }
-.slide-back-enter {
-  transform: translateX(-100px);
+.slide-back-enter-from {
+  transform: translateX(200px);
   opacity: 0;
 }
 .slide-back-leave-to {
-  transform: translateX(100px);
+  transform: translateX(-200px);
   opacity: 0;
 }
 </style>
