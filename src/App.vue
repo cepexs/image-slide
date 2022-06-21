@@ -54,44 +54,119 @@ const changePreview = (i) => {
 </script>
 
 <template>
-  <div class="preview" v-for="(item, x) in previewImage" :key="x">
-    <h1>{{ item.caption }}</h1>
-    <img :src="item.href" />
+  <div class="relative w-full min-h-screen flex flex-col">
+    <div
+      class="absolute h-2/3 w-full flex flex-col justify-center items-center"
+    >
+      <transition-group name="slide-next relative" mode="out-in">
+        <div
+          :id="x"
+          class="absolute"
+          v-for="(item, x) in previewImage"
+          :key="x"
+        >
+          <h1 class="text-center p-4">{{ item.caption }}</h1>
+          <img class="border rounded-lg shadow-lg" :src="item.href" />
+        </div>
+      </transition-group>
+    </div>
+
+    <div class="absolute top-0 h-2/3 w-full flex flex-row justify-between">
+      <button
+        class="w-1/4 flex flex-col justify-center items-end"
+        @click="prev"
+      >
+        <svg
+          class="w-6 h-6"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M15 19l-7-7 7-7"
+          ></path>
+        </svg>
+      </button>
+      <button
+        class="w-1/4 flex flex-col justify-center items-start"
+        @click="next"
+      >
+        <svg
+          class="w-6 h-6"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M9 5l7 7-7 7"
+          ></path>
+        </svg>
+      </button>
+    </div>
+
+    <div
+      class="absolute bottom-0 h-1/3 w-full flex flex-row justify-center items-center gap-4 py-8"
+    >
+      <img
+        v-for="(item, i) in footerImage"
+        :key="i"
+        class="w-24 rounded-lg cursor-pointer border-2 border-opacity-0 active:border selection:border-4"
+        :class="[i === step ? 'border-purple-800 border-opacity-100' : '']"
+        @click="changePreview(i)"
+        :src="item.href"
+      />
+    </div>
   </div>
-
-  <div class="footer">
-    <span v-for="(item, i) in footerImage" :key="i">
-      <img @click="changePreview(i)" :src="item.href" />
-    </span>
-  </div>
-
-  <button class="button" @click="prev">-</button>
-
-  <button class="button" @click="next">+</button>
 </template>
 
-<style>
-.preview {
-  width: 100%;
+<style scoped>
+/* vue transition */
+.slide-fade-enter-active {
+  transition: all 0.8s ease;
 }
-.footer {
-  width: 100%;
-  display: flex;
-  flex-direction: flex-row;
-  justify-content: center;
-  align-content: center;
-  gap: 10px;
-  border: 1px solid;
-  padding: 10px;
+.slide-fade-leave-active {
+  transition: all 0.3s cubic-bezier(1, 0.5, 0.3, 1);
 }
-
-.footer > span > img {
-  width: 50px;
-  cursor: pointer;
+.slide-fade-enter,
+.slide-fade-leave-to {
+  transform: translateX(30px);
+  opacity: 0;
 }
 
-.button {
-  padding: 30px;
-  margin: 20px;
+.slide-next-enter-active {
+  transition: all 1s ease;
+}
+.slide-next-leave-active {
+  transition: all 0.3s cubic-bezier(1, 0.5, 0.3, 1);
+}
+.slide-next-enter {
+  transform: translateX(100px);
+  opacity: 0;
+}
+.slide-next-leave-to {
+  transform: translateX(-100px);
+  opacity: 0;
+}
+.slide-back-enter-active {
+  transition: all 1s ease;
+}
+.slide-back-leave-active {
+  transition: all 0.3s cubic-bezier(1, 0.5, 0.3, 1);
+}
+.slide-back-enter {
+  transform: translateX(-100px);
+  opacity: 0;
+}
+.slide-back-leave-to {
+  transform: translateX(100px);
+  opacity: 0;
 }
 </style>
