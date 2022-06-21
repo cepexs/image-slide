@@ -1,7 +1,12 @@
-<script setup>
+<script lang="ts" setup>
 import { ref } from "vue";
 
-const previewImage = ref([]);
+interface footerImage {
+  href: String;
+  caption: String;
+}
+
+const previewImage = ref(<footerImage[]>[]);
 const step = ref(0);
 const footerImage = ref([
   {
@@ -60,13 +65,13 @@ const changePreview = (i) => {
     >
       <transition-group name="slide-next relative" mode="out-in">
         <div
-          :id="x"
+          :id="`${x}`"
           class="absolute"
           v-for="(item, x) in previewImage"
           :key="x"
         >
           <h1 class="text-center p-4">{{ item.caption }}</h1>
-          <img class="border rounded-lg shadow-lg" :src="item.href" />
+          <img class="border rounded-lg shadow-lg" :src="`${item.href}`" />
         </div>
       </transition-group>
     </div>
