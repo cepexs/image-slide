@@ -56,7 +56,7 @@ const prev = () => {
 };
 
 const changePreview = (i) => {
-  slideClass.value = "slide-fade";
+  slideClass.value = "slide-zoom";
   step.value = i;
   previewImage.value.push(footerImage.value[step.value]);
   previewImage.value.shift();
@@ -83,11 +83,11 @@ const changePreview = (i) => {
 
     <div class="absolute top-0 h-2/3 w-full flex flex-row justify-between">
       <button
-        class="w-1/4 flex flex-col justify-center items-end"
+        class="w-1/4 flex flex-col justify-center items-end group"
         @click="prev"
       >
         <svg
-          class="w-6 h-6"
+          class="w-6 h-6 transition duration-300 group-hover:-translate-x-4"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -102,11 +102,11 @@ const changePreview = (i) => {
         </svg>
       </button>
       <button
-        class="w-1/4 flex flex-col justify-center items-start"
+        class="w-1/4 flex flex-col justify-center items-start group"
         @click="next"
       >
         <svg
-          class="w-6 h-6"
+          class="w-6 h-6 transition duration-300 group-hover:translate-x-4"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -141,19 +141,21 @@ const changePreview = (i) => {
 
 <style scoped>
 /* vue transition */
-.slide-fade-enter-active {
+
+/* zoom */
+.slide-zoom-enter-active {
   transition: all 0.8s ease;
 }
-.slide-fade-enter-from {
+.slide-zoom-enter-from {
   transform: scale(0.5);
   opacity: 0;
 }
 
-.slide-fade-leave-active {
+.slide-zoom-leave-active {
   transition: all 0.7s cubic-bezier(1, 0.5, 0.3, 1);
 }
 
-.slide-fade-leave-to {
+.slide-zoom-leave-to {
   transform: scale(0.5);
   opacity: 0;
 }
