@@ -1,24 +1,24 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 
-interface footerImage {
-  href: String;
-  caption: String;
+interface footerImageType {
+  url: string;
+  caption: string;
 }
 
-const previewImage = ref(<footerImage[]>[]);
-const step = ref(0);
-const footerImage = ref([
+const previewImage = ref<footerImageType[]>([]);
+const step = ref<number>(0);
+const footerImage = ref<footerImageType[]>([
   {
-    href: "https://picsum.photos/200/300?random=1",
+    url: "https://picsum.photos/200/300?random=1",
     caption: "gambar 1",
   },
   {
-    href: "https://picsum.photos/200/300?random=2",
+    url: "https://picsum.photos/200/300?random=2",
     caption: "gambar 2",
   },
   {
-    href: "https://picsum.photos/200/300?random=3",
+    url: "https://picsum.photos/200/300?random=3",
     caption: "gambar 3",
   },
 ]);
@@ -55,7 +55,7 @@ const prev = () => {
   }
 };
 
-const changePreview = (i) => {
+const changePreview = (i: number) => {
   slideClass.value = "slide-zoom";
   step.value = i;
   previewImage.value.push(footerImage.value[step.value]);
@@ -68,15 +68,15 @@ const changePreview = (i) => {
     <div
       class="absolute h-2/3 w-full flex flex-col justify-center items-center"
     >
-      <transition-group taga="div" :name="slideClass" mode="out-in">
+      <transition-group :name="slideClass" mode="out-in">
         <div
-          :id="`${item.caption}}`"
+          :id="item.caption"
           class="absolute"
-          v-for="(item, x) in previewImage"
-          :key="`${item.caption}`"
+          v-for="item in previewImage"
+          :key="item.caption"
         >
           <h1 class="text-center p-4">{{ item.caption }}</h1>
-          <img class="border rounded-lg shadow-lg" :src="`${item.href}`" />
+          <img class="border rounded-lg shadow-lg" :src="item.url" />
         </div>
       </transition-group>
     </div>
@@ -133,7 +133,7 @@ const changePreview = (i) => {
           i === step ? 'border-purple-800 border-opacity-100 scale-105' : '',
         ]"
         @click="changePreview(i)"
-        :src="item.href"
+        :src="item.url"
       />
     </div>
   </div>
